@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>jefix.design — Premium Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-900:#05040a;
+      --accent:#7c3aed;      /* purple */
+      --accent-2:#00d4c4;    /* teal */
+      --muted:#cbd5e1;
+      --glass: rgba(255,255,255,0.04);
+      --glass-border: rgba(255,255,255,0.06);
+      --card-bg: rgba(255,255,255,0.02);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#fff;background:var(--bg-900);-webkit-font-smoothing:antialiased}
+    a{color:inherit;text-decoration:none}
+
+    /* ---------- premium animated background ---------- */
+    .bg-wrap{
+      position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+      background:
+        radial-gradient(800px 420px at 8% 10%, rgba(124,58,237,0.14), transparent 12%),
+        radial-gradient(600px 320px at 88% 82%, rgba(0,212,196,0.08), transparent 10%),
+        linear-gradient(180deg, rgba(6,6,10,0.85), rgba(7,5,10,0.98));
+      filter:blur(18px) saturate(120%);
+      animation: bgFloat 14s ease-in-out infinite;
+    }
+    @keyframes bgFloat { 0%{transform:translateY(0)}50%{transform:translateY(-20px)}100%{transform:translateY(0)} }
+
+    /* subtle moving lines overlay for premium feel */
+    .grid-lines{
+      position:fixed;inset:0;z-index:0;opacity:0.06;pointer-events:none;
+      background-image:
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 160px 160px, 160px 160px;
+      animation: linesMove 12s linear infinite;
+    }
+    @keyframes linesMove { 0%{background-position:0 0,0 0}100%{background-position:-160px 0,0 -160px} }
+
+    /* NAV */
+    nav{position:fixed;top:16px;left:16px;right:16px;display:flex;justify-content:space-between;align-items:center;z-index:40}
+    .brand{font-weight:800;letter-spacing:0.03em;font-size:18px}
+    .nav-links{display:flex;gap:18px;align-items:center}
+    .nav-links a{padding:8px 12px;border-radius:10px;background:transparent;border:1px solid transparent;color:rgba(255,255,255,0.9)}
+    .nav-links a:hover{border-color:var(--glass-border);background:rgba(255,255,255,0.02)}
+
+    /* Container */
+    .page{position:relative;z-index:10;min-height:100vh;padding:90px 28px 60px}
+    .container{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 420px;gap:36px;align-items:center}
+    @media (max-width:900px){ .container{grid-template-columns:1fr;gap:26px;padding:0 18px} .portrait-wrap{justify-self:center} }
+
+    /* left hero */
+    .eyebadge{display:inline-flex;gap:10px;align-items:center;padding:8px 12px;border-radius:999px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass-border);font-size:12px;color:rgba(255,255,255,0.85)}
+    h1{font-size:46px;margin:8px 0 0;line-height:1.02;font-weight:900}
+    .accent{background:linear-gradient(90deg,var(--accent),#a97bff);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .subglass{margin-top:14px;background:var(--card-bg);border-radius:14px;padding:18px;border:1px solid var(--glass-border);color:rgba(255,255,255,0.9)}
+    .subglass p{margin:8px 0 0;color:rgba(255,255,255,0.82);line-height:1.45}
+
+    /* highlighted glow word */
+    .glow-word{
+      position:relative;font-weight:800;color:var(--accent);
+      -webkit-text-stroke: 0.2px rgba(0,0,0,0.12);
+    }
+    /* pulsing glow */
+    .glow-word::after{
+      content:"";position:absolute;inset:0;z-index:-1;border-radius:6px;
+      box-shadow:0 0 14px rgba(124,58,237,0.22), 0 0 30px rgba(124,58,237,0.08);
+      opacity:0;transition:opacity .3s;
+      animation: pulseGlow 2.6s infinite;
+    }
+    @keyframes pulseGlow{
+      0%{opacity:0.12;transform:scale(0.98)}
+      50%{opacity:0.26;transform:scale(1.02)}
+      100%{opacity:0.12;transform:scale(0.98)}
+    }
+
+    /* hero right - portrait */
+    .portrait-wrap{width:420px;max-width:86vw;border-radius:20px;padding:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass-border);box-shadow:0 30px 80px rgba(2,6,23,0.7);display:flex;align-items:center;justify-content:center;position:relative;overflow:visible}
+    .portrait{width:100%;height:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;display:block;transition:transform .9s ease,filter .6s ease}
+    .portrait:hover{transform:scale(1.02) translateY(-6px);filter:brightness(1.03) saturate(1.05)}
+    .portrait-aurora{position:absolute;inset:8px;border-radius:16px;pointer-events:none;mix-blend-mode:screen;background:
+      radial-gradient(420px 220px at 20% 20%, rgba(124,58,237,0.12), transparent 12%),
+      radial-gradient(280px 140px at 80% 80%, rgba(0,212,196,0.06), transparent 8%);
+      filter:blur(30px);opacity:0.9
+    }
+
+    /* floating hire button */
+    .float-hire{
+      position:fixed;right:28px;bottom:26px;z-index:60;
+      border-radius:999px;padding:14px 18px;background:linear-gradient(90deg,var(--accent),#a97bff);box-shadow:0 10px 40px rgba(124,58,237,0.2);
+      color:white;font-weight:800;border:0;cursor:pointer;display:flex;align-items:center;gap:10px;align-self:flex-end;
+      transform-origin:center center;animation: floatBtn 3.6s ease-in-out infinite;
+    }
+    @keyframes floatBtn{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+    .float-hire .shine{display:inline-block;width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.18);box-shadow:0 0 18px rgba(255,255,255,0.28);filter:blur(0.6px)}
+
+    /* ---- Work area: two marquee rows, 5 thumbs each, repeating ---- */
+    .work-section{margin-top:40px}
+    .work-title{font-size:22px;margin-bottom:14px;font-weight:700}
+    .marquee{overflow:hidden;padding:10px 0;position:relative;border-radius:12px}
+    .track{display:flex;gap:18px;width:max-content;align-items:center}
+    .thumb{
+      width:220px;height:140px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.04);box-shadow:0 18px 40px rgba(3,6,14,0.6);flex:0 0 auto;padding:6px;display:flex;align-items:center;justify-content:center;
+    }
+    .thumb img{width:100%;height:100%;object-fit:cover;border-radius:8px}
+    /* two row animations */
+    .mar-left .track{animation: scrollLeft linear 20s infinite}
+    .mar-right .track{animation: scrollRight linear 20s infinite}
+    @keyframes scrollLeft{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    @keyframes scrollRight{0%{transform:translateX(-50%)}100%{transform:translateX(0)}}
+
+    /* footer area */
+    footer{margin-top:36px;padding:52px 0 18px;text-align:center;color:rgba(255,255,255,0.9)}
+    footer h2{font-size:44px;margin:0 0 6px}
+    footer p{margin:6px 0 0;color:rgba(255,255,255,0.85)}
+    .contacts{margin-top:14px;display:flex;gap:14px;justify-content:center;align-items:center}
+    .contact-pill{display:inline-flex;gap:10px;align-items:center;padding:8px 12px;border-radius:10px;background:linear-gradient(90deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.03)}
+
+    /* responsive tweaks */
+    @media (max-width:640px){
+      h1{font-size:30px}
+      .portrait-wrap{width:320px}
+      .thumb{width:170px;height:110px}
+      .container{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-wrap" aria-hidden="true"></div>
+  <div class="grid-lines" aria-hidden="true"></div>
+
+  <nav>
+    <div class="brand">jefix<span style="opacity:.78">.</span>design</div>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="hire.html" id="hireLink">Hire</a>
+    </div>
+  </nav>
+
+  <main class="page">
+    <div class="container">
+      <!-- left -->
+      <div>
+        <div class="eyebadge">Premium • <strong style="color:var(--accent)">Thumbnail Designer</strong></div>
+        <h1><span style="opacity:.95">Hey — it's me</span><br><span class="accent">Jeff</span></h1>
+
+        <div class="subglass">
+          <strong>I'M A <span class="glow-word">THUMBNAIL DESIGNER</span>.</strong>
+          <p>I craft <span class="glow-word">CTR-BOOSTING</span>, <span class="glow-word">EYE-CATCHING</span> thumbnails designed to <span class="glow-word">INCREASE CLICKS</span> and <span class="glow-word">GROW YOUR CHANNEL</span>. Professional — results-driven.</p>
+        </div>
+
+        <div style="margin-top:18px;display:flex;gap:12px;flex-wrap:wrap">
+          <a class="float-hire" href="hire.html"><span class="shine" aria-hidden="true"></span><span style="font-weight:800">Hire Me</span></a>
+          <a class="float-hire" style="background:transparent;border:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.92);box-shadow:none" href="#work">View Work</a>
+        </div>
+
+        <!-- Services summary -->
+        <div style="display:flex;gap:12px;margin-top:20px;flex-wrap:wrap">
+          <div class="contact-pill"><strong>Branding</strong></div>
+          <div class="contact-pill"><strong>A/B Variants</strong></div>
+          <div class="contact-pill"><strong>Channel Kits</strong></div>
+        </div>
+
+      </div>
+
+      <!-- right portrait -->
+      <div class="portrait-wrap">
+        <div class="portrait-aurora" aria-hidden="true"></div>
+        <!-- use the profile image you uploaded and named profile.png -->
+        <img class="portrait" src="profile.png" alt="Jeff portrait">
+      </div>
+
+    </div>
+
+    <!-- WORK -->
+    <section id="work" class="work-section" style="max-width:1200px;margin:32px auto 0;padding:0 18px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="work-title">Selected Work</div>
+        <div style="color:var(--muted);font-size:13px">5 thumbnails per row — alternating direction</div>
+      </div>
+
+      <!-- first row (left → right) -->
+      <div class="marquee mar-left" style="margin-top:12px">
+        <div class="track" id="rowTop"></div>
+      </div>
+
+      <!-- second row (right → left) -->
+      <div class="marquee mar-right" style="margin-top:18px">
+        <div class="track" id="rowBottom"></div>
+      </div>
+    </section>
+
+    <!-- Services + About -->
+    <section id="services" style="max-width:1200px;margin:36px auto;padding:0 18px">
+      <h2 style="margin:0 0 12px;font-size:20px">Services</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+        <div class="subglass"><strong>YouTube Thumbnails</strong><p style="opacity:.85;margin-top:8px">High-CTR thumbnail designs tailored to your niche.</p></div>
+        <div class="subglass"><strong>A/B Variant Sets</strong><p style="opacity:.85;margin-top:8px">Multiple options to test which converts best.</p></div>
+        <div class="subglass"><strong>Channel Branding</strong><p style="opacity:.85;margin-top:8px">Cohesive visuals across thumbnails, banners & more.</p></div>
+      </div>
+    </section>
+
+    <section id="about" style="max-width:900px;margin:28px auto;padding:0 18px">
+      <h2 style="margin:0 0 12px;font-size:20px">About</h2>
+      <div class="subglass"><p style="margin:0">Jeff — detail-focused thumbnail designer. I combine composition, color psychology, and bold typography to create thumbnails that people click. Fast turnaround and clear communication.</p></div>
+    </section>
+
+    <!-- footer -->
+    <footer>
+      <h2>THANKS</h2>
+      <p style="margin-top:6px">Let's work together — <strong class="accent">INCREASE YOUR CTR</strong></p>
+      <p style="opacity:.88;margin-top:6px">DM me</p>
+      <div class="contacts">
+        <div class="contact-pill">✉️ <strong>JEFIX.DESIGNS.CREATIVE</strong></div>
+        <div class="contact-pill">📸 <strong>@JEFIX.DESIGN</strong></div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    /* ---------- populate two tracks with 5 thumbnails each, then duplicate for seamless loop ---------- */
+    const sampleThumbs = [
+      'https://picsum.photos/seed/1/800/600',
+      'https://picsum.photos/seed/2/800/600',
+      'https://picsum.photos/seed/3/800/600',
+      'https://picsum.photos/seed/4/800/600',
+      'https://picsum.photos/seed/5/800/600'
+    ];
+    function makeThumb(src, label){
+      const el = document.createElement('div');
+      el.className = 'thumb';
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = label||'thumb';
+      el.appendChild(img);
+      return el;
+    }
+    function populate(trackId){
+      const track = document.getElementById(trackId);
+      // add 5 thumbnails
+      for(let i=0;i<5;i++) track.appendChild(makeThumb(sampleThumbs[i], 't'+i));
+      // duplicate to allow seamless scroll
+      for(let i=0;i<5;i++) track.appendChild(makeThumb(sampleThumbs[i], 't'+i+'dup'));
+    }
+    populate('rowTop'); populate('rowBottom');
+
+    // small nicety: pause animation on hover
+    document.querySelectorAll('.marquee').forEach(m=>{
+      m.addEventListener('mouseenter', ()=> m.querySelector('.track').style.animationPlayState='paused');
+      m.addEventListener('mouseleave', ()=> m.querySelector('.track').style.animationPlayState='running');
+    });
+
+    // make second row run at slightly different duration (reverse effect already from CSS)
+    document.getElementById('rowBottom').style.animationDuration = '22s';
+
+    // If user wants to click Hire button, it links to hire.html — file provided separately
+  </script>
+</body>
+</html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Project Inquiry — Jefix.Design</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#04030a;
+      --accent:#7c3aed;
+      --glass: rgba(255,255,255,0.03);
+      --glass-border: rgba(255,255,255,0.06);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;color:#fff;background:linear-gradient(180deg,#05030a,#071027 60%);-webkit-font-smoothing:antialiased}
+    .bg-aurora{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+      radial-gradient(600px 400px at 12% 18%, rgba(124,58,237,0.12), transparent 12%),
+      radial-gradient(400px 260px at 88% 82%, rgba(0,212,196,0.08), transparent 10%);
+      filter:blur(36px) saturate(120%);animation:aur 12s ease-in-out infinite;
+    }
+    @keyframes aur{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+
+    .wrap{position:relative;z-index:5;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px}
+    .card{width:920px;max-width:94vw;border-radius:16px;background:linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0.012));border:1px solid var(--glass-border);padding:26px;box-shadow:0 40px 120px rgba(2,6,14,0.7)}
+    .head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .head h1{margin:0;font-size:28px}
+    .subtitle{color:rgba(255,255,255,0.85);margin-top:6px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+    input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:rgba(0,0,0,0.45);color:#fff}
+    textarea{min-height:120px;resize:vertical}
+    label{font-size:13px;color:rgba(255,255,255,0.9);margin-bottom:6px;display:block}
+    .full{grid-column:1/-1}
+    .send{margin-top:12px;padding:12px 16px;border-radius:10px;background:linear-gradient(90deg,var(--accent),#a97bff);border:0;color:#fff;font-weight:800;cursor:pointer;box-shadow:0 18px 60px rgba(124,58,237,0.18)}
+    .hint{font-size:13px;color:rgba(255,255,255,0.75);margin-top:10px}
+
+    /* glowing header words */
+    .glow{color:var(--accent);font-weight:800;position:relative}
+    .glow::after{content:"";position:absolute;left:0;right:0;top:0;bottom:0;z-index:-1;border-radius:6px;box-shadow:0 0 30px rgba(124,58,237,0.18);opacity:1;filter:blur(6px)}
+
+    /* success message */
+    .status{margin-left:12px;color:#b7f7ef;font-weight:700}
+
+    @media (max-width:900px){ .grid{grid-template-columns:1fr} .card{padding:18px} }
+  </style>
+</head>
+<body>
+  <div class="bg-aurora" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="card">
+      <div class="head">
+        <div>
+          <h1>Project Inquiry — <span class="glow">Jefix.Design</span></h1>
+          <div class="subtitle">Fill the form below — required fields: <strong>Name, Age, Country, Budget</strong></div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:12px;color:rgba(255,255,255,0.8)">Private</div>
+          <div style="font-weight:800;color:var(--accent)">WhatsApp delivery</div>
+        </div>
+      </div>
+
+      <form id="inqForm" class="grid" onsubmit="return handleSend(event)">
+        <div>
+          <label for="name">Your Name *</label>
+          <input id="name" type="text" placeholder="e.g. Ali Khan" required>
+        </div>
+
+        <div>
+          <label for="age">Age *</label>
+          <input id="age" type="number" placeholder="e.g. 24" required min="13">
+        </div>
+
+        <div>
+          <label for="country">Country *</label>
+          <input id="country" type="text" placeholder="e.g. Pakistan" required>
+        </div>
+
+        <div>
+          <label for="phone">Phone / WhatsApp</label>
+          <input id="phone" type="text" placeholder="e.g. +92300xxxxxxx">
+        </div>
+
+        <div class="full">
+          <label for="reason">Why do you need a thumbnail designer?</label>
+          <input id="reason" type="text" placeholder="e.g. I need better CTR for my channel">
+        </div>
+
+        <div>
+          <label for="channel">Channel Link</label>
+          <input id="channel" type="url" placeholder="https://youtube.com/yourchannel">
+        </div>
+
+        <div>
+          <label for="insta">Instagram ID</label>
+          <input id="insta" type="text" placeholder="e.g. JEFIX.DESIGN">
+        </div>
+
+        <div>
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="you@example.com">
+        </div>
+
+        <div>
+          <label for="budget">What's your budget? *</label>
+          <select id="budget" required>
+            <option value="">-- Select budget --</option>
+            <option value="$10 / 100">$10 / 100</option>
+            <option value="$500 / 1000">$500 / 1000</option>
+            <option value="$1000 / 2500">$1000 / 2500</option>
+            <option value="$2500 / 5000">$2500 / 5000</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="type">Type of Thumbnail</label>
+          <select id="type">
+            <option>Gaming</option>
+            <option>Documentary</option>
+            <option>Blogs</option>
+            <option>Challenges</option>
+            <option>Business</option>
+            <option>Money Strategy</option>
+            <option>Comedy</option>
+          </select>
+        </div>
+
+        <div class="full">
+          <label for="note">Personal note to "JEFIX.DESIGNS"</label>
+          <textarea id="note" placeholder="Tell me important details, style references or deadlines"></textarea>
+        </div>
+
+        <div style="display:flex;gap:12px;align-items:center" class="full">
+          <button class="send" type="submit">SEND INQUIRY — LET'S BOOST YOUR CONTENT</button>
+          <div id="status" class="status" aria-live="polite"></div>
+        </div>
+
+        <div class="full hint">Note: To protect message privacy, the form requires <strong>Name, Age, Country, and Budget</strong> before the message is sent to WhatsApp. Other fields are optional.</div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // WhatsApp number (replace if needed)
+    const WA = '923200436201';
+
+    function escapeVal(v){ return encodeURIComponent(v||''); }
+
+    function handleSend(e){
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const age = document.getElementById('age').value.trim();
+      const country = document.getElementById('country').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const reason = document.getElementById('reason').value.trim();
+      const channel = document.getElementById('channel').value.trim();
+      const insta = document.getElementById('insta').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const budget = document.getElementById('budget').value;
+      const type = document.getElementById('type').value;
+      const note = document.getElementById('note').value.trim();
+
+      // required-check: name, age, country, budget
+      if(!name || !age || !country || !budget){
+        setStatus('Please fill Name, Age, Country and Budget to send.', true);
+        return false;
+      }
+
+      // build message (human readable)
+      let message = 'New Inquiry from Jefix.Design%0A';
+      message += 'Name: ' + escapeVal(name) + '%0A';
+      message += 'Age: ' + escapeVal(age) + '%0A';
+      message += 'Country: ' + escapeVal(country) + '%0A';
+      if(phone) message += 'Phone: ' + escapeVal(phone) + '%0A';
+      if(reason) message += 'Reason: ' + escapeVal(reason) + '%0A';
+      if(channel) message += 'Channel: ' + escapeVal(channel) + '%0A';
+      if(insta) message += 'Instagram: ' + escapeVal(insta) + '%0A';
+      if(email) message += 'Email: ' + escapeVal(email) + '%0A';
+      message += 'Budget: ' + escapeVal(budget) + '%0A';
+      message += 'Type: ' + escapeVal(type) + '%0A';
+      if(note) message += 'Note: ' + escapeVal(note) + '%0A';
+
+      // open whatsapp in new tab (private message to your number)
+      const url = 'https://wa.me/' + WA + '?text=' + message;
+      window.open(url, '_blank');
+
+      setStatus('Opening WhatsApp — message ready (private).', false);
+      document.getElementById('inqForm').reset();
+      return false;
+    }
+
+    function setStatus(t, err){
+      const s = document.getElementById('status');
+      s.textContent = t || '';
+      s.style.color = err ? '#ffb4b4' : '#b7f7ef';
+      setTimeout(()=> s.textContent = '', 6000);
+    }
+  </script>
+</body>
+</html>
